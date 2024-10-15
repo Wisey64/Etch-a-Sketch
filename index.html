@@ -7,6 +7,10 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>ETCH-A-SKETCH</h1>
+    <div id="bdiv">
+        <button id="btn1">enetr size </button>
+    </div>
     
 
     <div class="container">
@@ -23,16 +27,33 @@
         // a loop to create a 16x16 div grid
         const grid=[]
         for(i =0; i<256; ++i){
-            const grid =document.createElement("div")
+            const div =document.createElement("div")
             div.classList.add("grid")
             container.appendChild(div)
             grid.push(div)
 
 
             
-        }
-       
-     
+        } 
+        //a hover effect that changes the background color of the grid divs
+        grid.forEach((div) =>{ 
+            div.addEventListener("mouseover",() => {
+                div.style.backgroundColor="blue"
+            })
+
+        })
+       // a button that displays an input box when clicked
+ const btn1=document.getElementById("btn1")
+ btn1.addEventListener("click",myfunction,{once:true})
+ function myfunction () {
+    
+    const input=document.createElement("input")
+    input.classList.add("input")
+    input.setAttribute("type","number")
+    const bdiv =document.getElementById("bdiv")
+    bdiv.appendChild(input)
+ } 
+ 
     </script>
 </body>
 </html>
