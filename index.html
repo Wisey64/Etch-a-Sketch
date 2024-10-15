@@ -26,6 +26,7 @@
         const container= document.querySelector(".container")
         // a loop to create a 16x16 div grid
         const grid=[]
+        
         for(i =0; i<256; ++i){
             const div =document.createElement("div")
             div.classList.add("grid")
@@ -63,10 +64,35 @@
  function changeGridSize() {
     const data=document.getElementById("input")
     const dvalue=data.value
+    container.innerHTML = "";
+
+// Calculate the number of divs to create based on user input (dvalue)
+const totalDivs = dvalue * dvalue;
+
+// Create a new grid based on the user's input
+for (let i = 0; i < totalDivs; ++i) {
+    if(totalDivs>10000){break} else{
+    const div = document.createElement("div");
+    div.classList.add("grid");
+    container.appendChild(div);
+    
+    // Add hover effect to new divs
+    div.addEventListener("mouseover", () => {
+        div.style.backgroundColor = "blue";
+    });
+}}
+
+// Adjust the size of each div to fit in the same container space (e.g., 960px wide)
+const gridSize = 960 / dvalue;
+document.querySelectorAll('.grid').forEach(div => {
+    div.style.width = `${gridSize}px`;
+    div.style.height = `${gridSize}px`;
+});
+}
 
 
     
- }}
+ }
  
  
     </script>
