@@ -1,17 +1,75 @@
-
-body{display: flex;
+body {
+    display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;}
-    
-    
-    .container{display: flex;
+    flex-direction: column;
+    background-color: #2d2d2d;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+#sizeInputDiv {
+    margin-bottom: 20px;
+}
+
+#bdiv {
+    display: flex;
+    gap: 10px;
     flex-wrap: wrap;
-    border: 8px ,solid,skyblue;
-    
-    width: 960px; ;
-    height: 960px; ;}
-    
-    
-    
-    
+}
+
+button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border 0.3s;
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button:focus {
+    outline: none;
+    border: 4px solid gold;
+}
+
+#randombtn {
+    background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3);
+}
+
+#redbtn {
+    background-color: red;
+}
+
+#greenbtn {
+    background-color: green;
+}
+
+#yellowbtn {
+    background-color: yellow;
+}
+
+#blackbtn {
+    background-color: black;
+}
+
+#whitebtn {
+    background-color: white;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 8px solid skyblue;
+    width: 960px;
+    height: 960px;
+    background-color: white;
+}

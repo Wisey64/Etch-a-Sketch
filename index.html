@@ -4,23 +4,29 @@
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Etch-A-Sketch</title>
 </head>
 <body>
     <h1>ETCH-A-SKETCH</h1>
-    <div id="bdiv">
-        <button id="btn1">Enter size</button>
-        <button id="randombtn">Random Colors</button>
-        <button id="redbtn">Red</button>
-        <button id="greenbtn">Green</button>
-        <button id="yellowbtn">Yellow</button>
-        <button id="blackbtn">black</button>
-        <button id="whitebtn">white</button>
 
+    <div id="sizeInputDiv">
+        <button id="btn1">Enter size</button>
     </div>
     
-    <div class="container"></div>
+    
+    
 
+    <div id="bdiv">
+        <button id="randombtn"></button>
+        <button id="redbtn"></button>
+        <button id="greenbtn"></button>
+        <button id="yellowbtn"></button>
+        <button id="blackbtn"></button>
+        <button id="whitebtn"></button>
+    </div>
+    <br>
+    <div class="container"></div>
+    
     <script>
         const container = document.querySelector(".container");
         let currentColor = "blue"; // Default color
@@ -46,58 +52,76 @@
         }
 
         function changeColor(event) {
-            
-    let currentOpacity = parseFloat(event.target.style.opacity) || 0; // Get the current opacity or start at 0
+            let currentOpacity = parseFloat(event.target.style.opacity) || 0; // Get the current opacity or start at 0
 
-    // If it's not fully opaque yet, increment the opacity
-    if (currentOpacity < 1) {
-        currentOpacity += 0.1;
-        event.target.style.opacity = currentOpacity;
-    }
+            // If it's not fully opaque yet, increment the opacity
+            if (currentOpacity < 1) {
+                currentOpacity += 0.1;
+                event.target.style.opacity = currentOpacity;
+            }
 
-    // Allow white to overwrite any color and reset opacity to 1
-    if (currentColor === "white") {
-        event.target.style.backgroundColor = currentColor;
-        event.target.style.opacity = 1; // White always resets to full opacity
-    } 
-    // Allow random to overwrite only if the current color is white or the div is empty
-    else if (currentColor === "random" && (event.target.style.backgroundColor === "white" || event.target.style.backgroundColor === "")) {
-        let r = Math.floor(Math.random() * 256);
-        let g = Math.floor(Math.random() * 256);
-        let b = Math.floor(Math.random() * 256);
-        event.target.style.backgroundColor = `rgb(${r},${g},${b})`;
-        event.target.style.opacity = currentOpacity; // Apply progressive darkening for random color
-    } 
-    // Allow any other color to overwrite an empty div or a white div
-    else if (event.target.style.backgroundColor === "" || event.target.style.backgroundColor === "white") {
-        event.target.style.backgroundColor = currentColor;
-        event.target.style.opacity = currentOpacity; // Apply progressive darkening for other colors
-    }
-}
-
-
+            // Allow white to overwrite any color and reset opacity to 0.1
+            if (currentColor === "white") {
+                event.target.style.backgroundColor = currentColor;
+                event.target.style.opacity = 0.1 // White always resets to 0.1 opacity
+            } 
+            // Allow random to overwrite only if the current color is white or the div is empty
+            else if (currentColor === "random" && (event.target.style.backgroundColor === "white" || event.target.style.backgroundColor === "")) {
+                let r = Math.floor(Math.random() * 256);
+                let g = Math.floor(Math.random() * 256);
+                let b = Math.floor(Math.random() * 256);
+                event.target.style.backgroundColor = `rgb(${r},${g},${b})`;
+                event.target.style.opacity = currentOpacity; // Apply progressive darkening for random color
+            } 
+            // Allow any other color to overwrite an empty div or a white div
+            else if (event.target.style.backgroundColor === "" || event.target.style.backgroundColor === "white") {
+                event.target.style.backgroundColor = currentColor;
+                event.target.style.opacity = currentOpacity; // Apply progressive darkening for other colors
+            }
+        }
 
         // A button that displays an input box when clicked
         const btn1 = document.getElementById("btn1");
         btn1.addEventListener("click", getUserInput, { once: true });
 
         function getUserInput() {
-            const input = document.createElement("input");
-            input.classList.add("input");
-            input.setAttribute("id", "input");
-            input.setAttribute("type", "number");
-            const bdiv = document.getElementById("bdiv");
-            bdiv.appendChild(input);
+    // Create label for the input
+    const label = document.createElement("label");
+    label.setAttribute("for", "input");
+    label.textContent = "From 1 To 100:";
+    label.style.color = "white"; // Set label color
+    label.style.marginRight = "10px"; // Add space between label and input
 
-            // If user presses enter it works
-            input.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    const size = parseInt(input.value);
-                    if (size > 0 && size <= 100) {
-                        createGrid(size);
-                    }
-                }
-            });
+    const input = document.createElement("input");
+    input.classList.add("input");
+    input.setAttribute("id", "input");
+    input.setAttribute("type", "number");
+    input.setAttribute("min", "1");
+    input.setAttribute("max", "100");
+
+    const bdiv = document.getElementById("sizeInputDiv");
+    bdiv.appendChild(label); // Append label to the div
+    bdiv.appendChild(input); // Append input to the div
+
+    // If user presses enter it works
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            const size = parseInt(input.value);
+            if (size > 0 && size <= 100) {
+                createGrid(size);
+            }
+        }
+    });
+
+    // Another event to submit the input
+    btn1.addEventListener("click", () => {
+        const size = parseInt(input.value);
+        if (size > 0 && size <= 100) {
+            createGrid(size);
+        }
+    });
+}
+
 
             // Another event to submit the input
             btn1.addEventListener("click", () => {
@@ -106,7 +130,7 @@
                     createGrid(size);
                 }
             });
-        }
+        
 
         // Color button event listeners
         document.getElementById("redbtn").addEventListener("click", () => {
@@ -124,15 +148,17 @@
         document.getElementById("randombtn").addEventListener("click", () => {
             currentColor = "random"; // Set the current color to random
         });
+
         document.getElementById("blackbtn").addEventListener("click", () => {
             currentColor = "black";
         });
+
         document.getElementById("whitebtn").addEventListener("click", () => {
             currentColor = "white";
         });
 
         // Create the initial grid
-        createGrid(50);
+        createGrid(16);
     </script>
 </body>
 </html>
