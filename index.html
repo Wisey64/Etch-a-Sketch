@@ -11,32 +11,53 @@
     <div id="bdiv">
         <button id="btn1">Enter size</button>
         <button id="randombtn">Random Colors</button>
+        <button id="redbtn">Red</button>
+        <button id="greenbtn">Green</button>
+        <button id="yellowbtn">Yellow</button>
     </div>
     
     <div class="container"></div>
 
     <script>
         const container = document.querySelector(".container");
-        const grid = [];
+        let currentColor = "blue"; // Default color
 
-        // a loop to create a 16x16 div grid
-        for (let i = 0; i < 256; ++i) {
-            const div = document.createElement("div");
-            div.classList.add("grid");
-            container.appendChild(div);
-            grid.push(div);
+        // Create an initial 16x16 div grid
+        function createGrid(size) {
+            container.innerHTML = "";
+            const totalDivs = size * size;
+
+            for (let i = 0; i < totalDivs; i++) {
+                const div = document.createElement("div");
+                div.classList.add("grid");
+                div.addEventListener("mouseover", changeColor);
+                container.appendChild(div);
+            }
+
+            // Adjust the size of each div to fit in the container
+            const gridSize = 960 / size;
+            document.querySelectorAll('.grid').forEach(div => {
+                div.style.width = `${gridSize}px`;
+                div.style.height = `${gridSize}px`;
+            });
         }
 
-        // a hover effect that changes the background color of the grid divs
-        grid.forEach((div) => {
-            div.addEventListener("mouseover", blueBackground);
-        });
-
-        function blueBackground(event) {
-            event.target.style.backgroundColor = "blue";
+        function changeColor(event) {
+            // Prevent color change if the div is already colored
+            if (event.target.style.backgroundColor !== "") {
+                return;
+            }
+            if (currentColor === "random") {
+                let r = Math.floor(Math.random() * 256);
+                let g = Math.floor(Math.random() * 256);
+                let b = Math.floor(Math.random() * 256);
+                event.target.style.backgroundColor = `rgb(${r},${g},${b})`;
+            } else {
+                event.target.style.backgroundColor = currentColor;
+            }
         }
 
-        // a button that displays an input box when clicked
+        // A button that displays an input box when clicked
         const btn1 = document.getElementById("btn1");
         btn1.addEventListener("click", getUserInput, { once: true });
 
@@ -48,60 +69,44 @@
             const bdiv = document.getElementById("bdiv");
             bdiv.appendChild(input);
 
-            // if user prees enter it works
+            // If user presses enter it works
             input.addEventListener("keypress", function (event) {
                 if (event.key === "Enter") {
-                    changeGridSize();
+                    const size = parseInt(input.value);
+                    if (size > 0 && size <= 100) {
+                        createGrid(size);
+                    }
                 }
             });
 
-            // another event to submit the input
-            btn1.addEventListener("click", changeGridSize);
-        }
-
-        function changeGridSize() {
-            const data = document.getElementById("input");
-            const dvalue = data.value;
-            container.innerHTML = "";
-
-            // calculate the number of divs to create based on user input (dvalue)
-            const totalDivs = dvalue * dvalue;
-
-            if (totalDivs > 10000) {
-                return;
-            }
-
-            // create a new grid based on the user's input
-            for (let i = 0; i < totalDivs; ++i) {
-                const div = document.createElement("div");
-                div.classList.add("grid");
-                container.appendChild(div);
-                div.addEventListener("mouseover", blueBackground);
-            }
-
-            // Adjust the size of each div to fit in the same container space (e.g., 960px wide)
-            const gridSize = 960 / dvalue;
-            document.querySelectorAll('.grid').forEach(div => {
-                div.style.width = `${gridSize}px`;
-                div.style.height = `${gridSize}px`;
+            // Another event to submit the input
+            btn1.addEventListener("click", () => {
+                const size = parseInt(input.value);
+                if (size > 0 && size <= 100) {
+                    createGrid(size);
+                }
             });
         }
 
-        // add another button for random color
-        const randombtn = document.getElementById("randombtn");
-        randombtn.addEventListener("click", () => {
-            const gridDivs = document.querySelectorAll(".grid");
-
-            gridDivs.forEach((div) => {
-                div.removeEventListener("mouseover", blueBackground);
-                div.addEventListener("mouseover", () => {
-                    let r = Math.floor(Math.random() * 256);
-                    let g = Math.floor(Math.random() * 256);
-                    let b = Math.floor(Math.random() * 256);
-                    div.style.backgroundColor = `rgb(${r},${g},${b})`;
-                }, { once: true });
-            });
+        // Color button event listeners
+        document.getElementById("redbtn").addEventListener("click", () => {
+            currentColor = "red";
         });
+
+        document.getElementById("greenbtn").addEventListener("click", () => {
+            currentColor = "green";
+        });
+
+        document.getElementById("yellowbtn").addEventListener("click", () => {
+            currentColor = "yellow";
+        });
+
+        document.getElementById("randombtn").addEventListener("click", () => {
+            currentColor = "random"; // Set the current color to random
+        });
+
+        // Create the initial grid
+        createGrid(16);
     </script>
 </body>
 </html>
