@@ -9,92 +9,99 @@
 <body>
     <h1>ETCH-A-SKETCH</h1>
     <div id="bdiv">
-        <button id="btn1">enetr size </button>
+        <button id="btn1">Enter size</button>
+        <button id="randombtn">Random Colors</button>
     </div>
     
-
-    <div class="container">
-
-    </div>
-
-
-
-
-
+    <div class="container"></div>
 
     <script>
-        const container= document.querySelector(".container")
+        const container = document.querySelector(".container");
+        const grid = [];
+
         // a loop to create a 16x16 div grid
-        const grid=[]
-        
-        for(i =0; i<256; ++i){
-            const div =document.createElement("div")
-            div.classList.add("grid")
-            container.appendChild(div)
-            grid.push(div)
+        for (let i = 0; i < 256; ++i) {
+            const div = document.createElement("div");
+            div.classList.add("grid");
+            container.appendChild(div);
+            grid.push(div);
+        }
 
-
-            
-        } 
-        //a hover effect that changes the background color of the grid divs
-        grid.forEach((div) =>{ 
-            div.addEventListener("mouseover",() => {
-                div.style.backgroundColor="blue"
-            })
-
-        })
-       // a button that displays an input box when clicked
- const btn1=document.getElementById("btn1")
- btn1.addEventListener("click",getUserInput,{once:true})
- function getUserInput () {
-    
-    const input=document.createElement("input")
-    input.classList.add("input")
-    input.setAttribute("id", "input")
-    input.setAttribute("type","number")
-    const bdiv =document.getElementById("bdiv")
-    bdiv.appendChild(input)
-    // if user prees enter it works
- input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            changeGridSize();  }
+        // a hover effect that changes the background color of the grid divs
+        grid.forEach((div) => {
+            div.addEventListener("mouseover", blueBackground);
         });
- // another event to submit the input
- btn1.addEventListener("click",changeGridSize)
- function changeGridSize() {
-    const data=document.getElementById("input")
-    const dvalue=data.value
-    container.innerHTML = "";
 
-// Calculate the number of divs to create based on user input (dvalue)
-const totalDivs = dvalue * dvalue;
+        function blueBackground(event) {
+            event.target.style.backgroundColor = "blue";
+        }
 
-// Create a new grid based on the user's input
-for (let i = 0; i < totalDivs; ++i) {
-    if(totalDivs>10000){break} else{
-    const div = document.createElement("div");
-    div.classList.add("grid");
-    container.appendChild(div);
-    
-    // Add hover effect to new divs
-    div.addEventListener("mouseover", () => {
-        div.style.backgroundColor = "blue";
-    });
-}}
+        // a button that displays an input box when clicked
+        const btn1 = document.getElementById("btn1");
+        btn1.addEventListener("click", getUserInput, { once: true });
 
-// Adjust the size of each div to fit in the same container space (e.g., 960px wide)
-const gridSize = 960 / dvalue;
-document.querySelectorAll('.grid').forEach(div => {
-    div.style.width = `${gridSize}px`;
-    div.style.height = `${gridSize}px`;
-});
-}
+        function getUserInput() {
+            const input = document.createElement("input");
+            input.classList.add("input");
+            input.setAttribute("id", "input");
+            input.setAttribute("type", "number");
+            const bdiv = document.getElementById("bdiv");
+            bdiv.appendChild(input);
 
+            // if user prees enter it works
+            input.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    changeGridSize();
+                }
+            });
 
-    
- }
- 
- 
+            // another event to submit the input
+            btn1.addEventListener("click", changeGridSize);
+        }
+
+        function changeGridSize() {
+            const data = document.getElementById("input");
+            const dvalue = data.value;
+            container.innerHTML = "";
+
+            // calculate the number of divs to create based on user input (dvalue)
+            const totalDivs = dvalue * dvalue;
+
+            if (totalDivs > 10000) {
+                return;
+            }
+
+            // create a new grid based on the user's input
+            for (let i = 0; i < totalDivs; ++i) {
+                const div = document.createElement("div");
+                div.classList.add("grid");
+                container.appendChild(div);
+                div.addEventListener("mouseover", blueBackground);
+            }
+
+            // Adjust the size of each div to fit in the same container space (e.g., 960px wide)
+            const gridSize = 960 / dvalue;
+            document.querySelectorAll('.grid').forEach(div => {
+                div.style.width = `${gridSize}px`;
+                div.style.height = `${gridSize}px`;
+            });
+        }
+
+        // add another button for random color
+        const randombtn = document.getElementById("randombtn");
+        randombtn.addEventListener("click", () => {
+            const gridDivs = document.querySelectorAll(".grid");
+
+            gridDivs.forEach((div) => {
+                div.removeEventListener("mouseover", blueBackground);
+                div.addEventListener("mouseover", () => {
+                    let r = Math.floor(Math.random() * 256);
+                    let g = Math.floor(Math.random() * 256);
+                    let b = Math.floor(Math.random() * 256);
+                    div.style.backgroundColor = `rgb(${r},${g},${b})`;
+                }, { once: true });
+            });
+        });
     </script>
 </body>
 </html>
